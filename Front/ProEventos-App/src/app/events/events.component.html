@@ -1,7 +1,50 @@
-<h1>Component Events</h1>
+<h2>Events</h2>
+<hr>
 
-<div *ngFor="let event of events">
-  <p><strong>Subject: </strong>{{event.subject}}</p>
-  <p><strong>Location: </strong>{{event.location}}</p>
-  <br>
+<div class="form-inline">
+  <div class="form-group mb-2">
+    <label class="mr-2">Filter: </label>
+    <input type="text" class="form-control mr-2" placeholder="Search" [(ngModel)]="listFilter">
+  </div>
 </div>
+
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th>
+        <span (click)="changeImage()" type="button" data-bs-toggle="collapse" data-bs-target="#image">{{ showImage ? "Hide" : "Show" }}</span>
+      </th>
+      <th>#</th>
+      <th>Subject</th>
+      <th>Location</th>
+      <th>Date</th>
+      <th># of People</th>
+      <th>Batch</th>
+      <th>Options</th>
+    </tr>
+  </thead>
+  <tbody *ngIf="events && events.length > 0">
+    <tr *ngFor="let event of filteredEvents">
+      <td><img class="collapse navbar-collapse" [collapse]="!showImage" [isAnimated]="true" id="image"
+        src="/assets/{{event.imageURL}}" [style.width.px]="imageWidth" [style.margin.px]="imageMargin"></td>
+      <td>{{event.eventId}}</td>
+      <td>{{event.subject}}</td>
+      <td>{{event.location}}</td>
+      <td>{{event.eventDate}}</td>
+      <td>{{event.peopleQuantity}}</td>
+      <td>{{event.batch}}</td>
+      <td>
+        <button class="btn btn-primary btn-sm mr-2">Edit</button>
+        <button class="btn btn-danger btn-sm">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot *ngIf="!(events.length > 0)">
+    <tr>
+      <td colspan="8" class="text-center">
+        <h4>No event found!</h4>
+      </td>
+    </tr>
+  </tfoot>
+</table>
+
