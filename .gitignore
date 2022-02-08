@@ -503,3 +503,5 @@ Thumbs.db
 *.db
 *.db-shm
 *.db-wal
+.vscode/launch.json
+.vscode/tasks.json
