@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ProEventos.Application.Contracts;
 using ProEventos.Domain;
 using ProEventos.Persistence.Contexts;
 
@@ -10,23 +14,69 @@ namespace ProEventos.API.Controllers
     [Route("api/[controller]")]
     public class EventsController : ControllerBase
     {
-        private readonly ProEventosContext _context;
+        
+        private readonly IEventService _eventService;
 
-        public EventsController(ProEventosContext context)
+        public EventsController(IEventService eventService)
         {
-            _context = context;
+            _eventService = eventService;
         }
 
         [HttpGet]
-        public IEnumerable<Event> Get()
+        public async Task<IActionResult> Get()
         {
-            return _context.Events;
+            try
+            {
+                var events = await _eventService.GetAllEventsAsync(true);
+                
+                if (events == null)
+                    return NotFound("No event found!");
+                
+                return Ok(events);
+            }
+            catch (Exception e)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError,
+                    $"Error trying to get events. Error: {e.Message}");
+            }
         }
 
         [HttpGet("{id}")]
-        public Event GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            return _context.Events.FirstOrDefault(e => e.Id == id);
+            try
+            {
+                var e = await _eventService.GetEventByIdAsync(id, true);
+                
+                if (e == null)
+                    return NotFound("Event not found!");
+                
+                return Ok(e);
+            }
+            catch (Exception e)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError,
+                    $"Error trying to get event. Error: {e.Message}");
+            }
+        }
+
+        [HttpGet("{subject}/subject")]
+        public async Task<IActionResult> GetBySubject(string subject)
+        {
+            try
+            {
+                var events = await _eventService.GetAllEventsBySubjectAsync(subject, true);
+                
+                if (events == null)
+                    return NotFound("No events found!");
+                
+                return Ok(events);
+            }
+            catch (Exception e)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError,
+                    $"Error trying to get event. Error: {e.Message}");
+            }
         }
 
         [HttpPost]

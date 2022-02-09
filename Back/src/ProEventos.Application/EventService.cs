@@ -15,7 +15,6 @@ namespace ProEventos.Application
         {
             _eventPersist = eventPersist;
             _generalPersist = generalPersist;
-
         }
 
         public async Task<Event> AddEvents(Event model)
@@ -37,29 +36,94 @@ namespace ProEventos.Application
 
         public async Task<Event> UpdateEvent(int eventId, Event model)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                var e = await _eventPersist.GetEventByIdAsync(eventId);
+                
+                if (e == null)
+                    return null;
+                
+                model.Id = eventId;
+
+                _generalPersist.Update(model);
+
+                if (await _generalPersist.SaveChangesAsync())
+                {
+                    return await _eventPersist.GetEventByIdAsync(model.Id);
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
-        public Task<bool> DeleteEvent(int eventId)
+        public async Task<bool> DeleteEvent(int eventId)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                var e = await _eventPersist.GetEventByIdAsync(eventId);
+                
+                if (e == null)
+                    throw new Exception("Event not found! Deletion could not be completed.");
+
+                _generalPersist.Update(e);
+
+                return await _generalPersist.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
-        public Task<Event[]> GetAllEventsAsync(bool includeSpeakers = false)
+        public async Task<Event[]> GetAllEventsAsync(bool includeSpeakers = false)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                var events = await _eventPersist.GetAllEventsAsync();
+                if (events == null)
+                    return null;
+                
+                return events;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
-        public Task<Event[]> GetAllEventsBySubjectAsync(string subject, bool includeSpeakers = false)
+        public async Task<Event[]> GetAllEventsBySubjectAsync(string subject, bool includeSpeakers = false)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                var events = await _eventPersist.GetAllEventsBySubjectAsync(subject);
+                if (events == null)
+                    return null;
+                
+                return events;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
-        public Task<Event> GetEventByIdAsync(int eventId, bool includeSpeakers = false)
+        public async Task<Event> GetEventByIdAsync(int eventId, bool includeSpeakers = false)
         {
-            throw new System.NotImplementedException();
-        }
-
-        
+            try
+            {
+                var e = await _eventPersist.GetEventByIdAsync(eventId);
+                if (e == null)
+                    return null;
+                
+                return e;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        } 
     }
 }
