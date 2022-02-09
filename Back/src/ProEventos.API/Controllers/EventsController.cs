@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProEventos.Application.Contracts;
 using ProEventos.Domain;
-using ProEventos.Persistence.Contexts;
 
 namespace ProEventos.API.Controllers
 {
@@ -75,26 +72,64 @@ namespace ProEventos.API.Controllers
             catch (Exception e)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError,
-                    $"Error trying to get event. Error: {e.Message}");
+                    $"Error trying to get events. Error: {e.Message}");
             }
         }
 
         [HttpPost]
-        public string Post()
+        public async Task<IActionResult> Post(Event model)
         {
-            return "Post example";
+            try
+            {
+                var events = await _eventService.AddEvents(model);
+                
+                if (events == null)
+                    return BadRequest("Error trying to add event.");
+                
+                return Ok(events);
+            }
+            catch (Exception e)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError,
+                    $"Error trying to add event. Error: {e.Message}");
+            }
         }
 
         [HttpPut("{id}")]
-        public string Put(int id)
+        public async Task<IActionResult> Put(int id, Event model)
         {
-            return $"Put example with id = {id}";
+            try
+            {
+                var events = await _eventService.UpdateEvent(id, model);
+                
+                if (events == null)
+                    return BadRequest("Error trying to add event.");
+                
+                return Ok(events);
+            }
+            catch (Exception e)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError,
+                    $"Error trying to update event. Error: {e.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
-        public string Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return $"Delete example with id = {id}";
+            try
+            {
+                if (await _eventService.DeleteEvent(id))
+                    return Ok("Event deleted");
+                else
+                    return BadRequest();
+
+            }
+            catch (Exception e)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError,
+                    $"Error trying to delete event. Error: {e.Message}");
+            }
         }
     }
 }
