@@ -2,11 +2,9 @@ import { Event } from "./Event";
 import { Speaker } from "./Speaker";
 
 export interface SocialNetwork {
-    Id: number;
-    Name: string;
+    id: number;
+    name: string;
     URL: string;
-    EventId?: number;
-    Event: Event;
-    SpeakerId?: number;
-    Speaker: Speaker;
+    eventId: number;
+    speakerId: number;
 }
