@@ -17,7 +17,7 @@
       </div>
     </div>
   
-    <table class="table table-striped">
+    <table class="table table-striped table-hover">
       <thead class="thead-dark">
         <tr>
           <th>
@@ -36,7 +36,7 @@
         </tr>
       </thead>
       <tbody *ngIf="events && events.length > 0">
-        <tr *ngFor="let event of filteredEvents">
+        <tr *ngFor="let event of filteredEvents" (click)="eventDetail(event.id)" style="cursor: pointer;">
           <td><img class="collapse navbar-collapse" [collapse]="!showImage" [isAnimated]="true" id="image"
             src="/assets/{{ event.imageURL }}" [style.width.px]="imageWidth" [style.margin.px]="imageMargin"></td>
           <td>{{ event.id }}</td>

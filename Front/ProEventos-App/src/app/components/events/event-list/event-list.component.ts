@@ -1,4 +1,5 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -42,7 +43,8 @@ export class EventListComponent implements OnInit {
   constructor(private eventService: EventService,
               private modalService: BsModalService,
               private toastr: ToastrService,
-              private spinner: NgxSpinnerService) { }
+              private spinner: NgxSpinnerService,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.spinner.show();
@@ -78,6 +80,10 @@ export class EventListComponent implements OnInit {
 
   decline(): void {
     this.modalRef?.hide();
+  }
+
+  eventDetail(id: number): void {
+    this.router.navigate([`events/detail/${id}`]);
   }
 
 }
