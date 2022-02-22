@@ -20,7 +20,7 @@ namespace ProEventos.Persistence
         public async Task<Event[]> GetAllEventsAsync(bool includeSpeakers = false)
         {
             IQueryable<Event> query = _context.Events
-                .Include(e => e.Batch)
+                .Include(e => e.Batches)
                 .Include(e => e.SocialNetworks);
             
             if (includeSpeakers)
@@ -37,7 +37,7 @@ namespace ProEventos.Persistence
         public async Task<Event[]> GetAllEventsBySubjectAsync(string subject, bool includeSpeakers = false)
         {
             IQueryable<Event> query = _context.Events
-                .Include(e => e.Batch)
+                .Include(e => e.Batches)
                 .Include(e => e.SocialNetworks);
             
             if (includeSpeakers)
@@ -56,7 +56,7 @@ namespace ProEventos.Persistence
         public async Task<Event> GetEventByIdAsync(int eventId, bool includeSpeakers = false)
         {
             IQueryable<Event> query = _context.Events
-                .Include(e => e.Batch)
+                .Include(e => e.Batches)
                 .Include(e => e.SocialNetworks);
             
             if (includeSpeakers)

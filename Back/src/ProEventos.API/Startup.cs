@@ -10,6 +10,8 @@ using ProEventos.Application.Contracts;
 using ProEventos.Persistence;
 using ProEventos.Persistence.Contexts;
 using ProEventos.Persistence.Contracts;
+using AutoMapper;
+using System;
 
 namespace ProEventos.API
 {
@@ -30,10 +32,11 @@ namespace ProEventos.API
                 context => context.UseSqlite(Configuration.GetConnectionString("Default"))
             );
             services.AddControllers()
-                .AddNewtonsoftJson
-                (
-                    x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-                );
+            .AddNewtonsoftJson
+            (
+                x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IEventPersist, EventPersist>();
