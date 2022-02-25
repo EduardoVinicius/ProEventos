@@ -120,7 +120,7 @@ namespace ProEventos.API.Controllers
             try
             {
                 if (await _eventService.DeleteEvent(id))
-                    return Ok("Event deleted");
+                    return Ok(new { message = "Deleted" });
                 else
                     throw new Exception("A non specific error occurred during event deletion!");
 

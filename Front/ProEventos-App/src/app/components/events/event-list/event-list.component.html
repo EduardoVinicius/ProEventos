@@ -44,9 +44,9 @@
           <td class="d-none d-md-table-cell">{{ event.location }}</td>
           <td>{{ event.eventDate | DateFormatPipe }}</td>
           <td class="d-none d-md-table-cell">{{ event.peopleQuantity }}</td>
-          <td class="d-none d-md-table-cell">{{ event.batch[0].name }}</td>
+          <td class="d-none d-md-table-cell">{{ event.batch[0]?.name }}</td>
           <td>
-            <button class="btn btn-danger btn-lg" tooltip="Delete" (click)="openModal(template)">
+            <button class="btn btn-danger btn-lg" tooltip="Delete" (click)="openModal($event, template, event.id)">
               <i class="fa fa-trash"></i>
             </button>
           </td>
@@ -63,7 +63,7 @@
   </div>
   <ng-template #template>
     <div class="modal-body text-center">
-      <p>Do you really want to delete this event?</p>
+      <p>Do you really want to event {{ this.eventId }}?</p>
       <button type="button" class="btn btn-default" (click)="confirm()" >Yes</button>
       <button type="button" class="btn btn-primary" (click)="decline()" >No</button>
     </div>

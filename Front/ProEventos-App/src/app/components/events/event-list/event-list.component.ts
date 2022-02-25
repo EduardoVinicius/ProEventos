@@ -17,6 +17,7 @@ export class EventListComponent implements OnInit {
   modalRef?: BsModalRef;
   public events: Event[] = [];
   public filteredEvents: Event[] = [];
+  public eventId?: number;
 
   public imageWidth = 80;
   public imageMargin = 5;
@@ -69,13 +70,27 @@ export class EventListComponent implements OnInit {
     });
   }
 
-  openModal(template: TemplateRef<any>) {
+  openModal(event: any, template: TemplateRef<any>, eventId: number) {
+    event.stopPropagation();
+    this.eventId = eventId;
     this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
   }
 
   confirm(): void {
     this.modalRef?.hide();
-    this.toastr.success('Event removed successfully!', 'Deleted!');
+    this.spinner.show();
+
+    this.eventService.deleteEvent(this.eventId).subscribe(
+      (result: any) => {
+        console.log(result);
+        this.toastr.success('Event removed successfully!', 'Deleted!');
+        this.getEvents();
+      },
+      (error: any) => {
+        console.error(error);
+        this.toastr.error(`Error trying to delete event ${this.eventId}`, 'Error');
+      }
+    ).add(() => this.spinner.hide());
   }
 
   decline(): void {
