@@ -32,6 +32,7 @@ import { EventListComponent } from './components/events/event-list/event-list.co
 import { UserComponent } from './components/user/user.component';
 import { LoginComponent } from './components/user/login/login.component';
 import { RegistrationComponent } from './components/user/registration/registration.component';
+import { BatchService } from './services/batch.service';
 
 defineLocale('pt-br', ptBrLocale);
 
@@ -73,7 +74,8 @@ defineLocale('pt-br', ptBrLocale);
     NgxSpinnerModule
   ],
   providers: [
-    EventService
+    EventService,
+    BatchService
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
